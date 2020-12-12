@@ -13,6 +13,41 @@ const config = {
     measurementId: "G-P89HJ1CH6Y"
   }
 
+// almacenar al usuario en la base de datos si no existe todavía
+//userAuth lo agarro luego de hacer el sign in en app.js component
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+//del userAuth puedo recibir null o el objeto, solo quiero almacenar el objeto
+    if (!userAuth) return; //si el usuario es null retorno,  porque nadie esta logeado!!
+
+// ok, el usuario se logeo, primero tengo que ver en firebase si existe este usuario
+// si no existe tengo que guardarlo
+    //console.log(firestore.doc(`user/jñdfljg4837ñlkjdjfa`))   //un id ficticio para ver que me trae 
+    //aca viene propiedades con info de la query:
+    const userRef = firestore.doc(`user/${userAuth.uid}`)
+    //aca viene la data del usuario buscado
+    const snapShot = await userRef.get()//en este objeto esta la propiedad exists, que nos dice si existe en la base de datos
+
+    if (!snapShot.exists) {//aca chequeo si existen datos 
+        const {displayName, email} = userAuth //objeto gigante que me trae luego del sign in
+        const createdAt = new Date() //aca coloco los datos del momento en que creo el usuario en la base de datos
+
+        try{
+            await userRef.set({ // aca utilizo el metodo set para guardar este objeto con todos los datos
+                displayName,
+                email,
+                createdAt,
+                ...additionalData
+            })
+        }catch(error){
+            console.log("error creating user", error.message)
+        }
+    }
+
+    return userRef;
+    console.log({snapShot})
+}
+
+//permite almacenar el usuario en la base deluego de hacer el sing in en la app 
 firebase.initializeApp(config);
 
 export const auth = firebase.auth()
