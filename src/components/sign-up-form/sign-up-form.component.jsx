@@ -71,7 +71,7 @@ const handleSubmit = async(event) =>{
         />
         <FormInput
         label="Pasword"
-          type="pasword"
+          type="password"
           onChange={handleChange}
           name="pasword"
           value={pasword}
@@ -85,7 +85,7 @@ const handleSubmit = async(event) =>{
           value={confirmPasword}
           required
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Sign Up</Button>
       </form>
     </div>
   );
