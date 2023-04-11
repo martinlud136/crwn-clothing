@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-import FormInput from "../form-input/form-input.component"
+import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-import { createAuthUserWhithEmailAndPasword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+import {
+  createAuthUserWhithEmailAndPasword,
+  createUserDocumentFromAuth,
+} from "../../utils/firebase/firebase.utils";
 
-import "./sign-up-form.styles.scss"
+import "./sign-up-form.styles.scss";
 
 const defaultFormFields = {
   displayName: "",
@@ -13,36 +16,39 @@ const defaultFormFields = {
   confirmPasword: "",
 };
 
-
 const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, pasword, confirmPasword } = formFields;
 
-  const resetFromfields= () =>{
-    setFormFields(defaultFormFields)
-  }
-const handleSubmit = async(event) =>{
-    event.preventDefault()
-    if(pasword !== confirmPasword){
-        alert("los paswords no son iguales")
-    }else{
-        try{
-            const { user } = await createAuthUserWhithEmailAndPasword(email, pasword, displayName)
-            await createUserDocumentFromAuth(user, {displayName})
-            resetFromfields()
-        }catch(error){
-            if(error.code === "auth/email-already-in-use"){
-                alert("el usuario ya ha sido registrado")
-            }else{
-                console.log("error al logear el usuario", error.message)
-            }
-
+  const resetFromfields = () => {
+    setFormFields(defaultFormFields);
+  };
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (pasword !== confirmPasword) {
+      alert("los paswords no son iguales");
+    } else {
+      try {
+        const { user } = await createAuthUserWhithEmailAndPasword(
+          email,
+          pasword,
+          displayName
+        );
+        await createUserDocumentFromAuth(user, { displayName });
+        resetFromfields();
+      } catch (error) {
+        if (error.code === "auth/email-already-in-use") {
+          alert("el usuario ya ha sido registrado");
+        } else {
+          console.log("error al logear el usuario", error.message);
         }
+      }
     }
     //confirmar que las pasword coinciden
     //ver si hemos autenticado al usuario con email y pasword
     //crear un user document con lo que retorna el paso anterior
-}
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
@@ -50,7 +56,7 @@ const handleSubmit = async(event) =>{
 
   return (
     <div className="sign-up-container">
-    <h2>Don't have an account?</h2>
+      <h2>Don't have an account?</h2>
       <span>Sign Up with your email and pasword</span>
       <form onSubmit={handleSubmit}>
         <FormInput
@@ -62,7 +68,7 @@ const handleSubmit = async(event) =>{
           required
         />
         <FormInput
-        label="Email"
+          label="Email"
           type="email"
           onChange={handleChange}
           name="email"
@@ -70,7 +76,7 @@ const handleSubmit = async(event) =>{
           required
         />
         <FormInput
-        label="Pasword"
+          label="Pasword"
           type="password"
           onChange={handleChange}
           name="pasword"
@@ -78,8 +84,8 @@ const handleSubmit = async(event) =>{
           required
         />
         <FormInput
-        label="Confirm Pasword"
-          type="pasword"
+          label="Confirm Pasword"
+          type="password"
           onChange={handleChange}
           name="confirmPasword"
           value={confirmPasword}

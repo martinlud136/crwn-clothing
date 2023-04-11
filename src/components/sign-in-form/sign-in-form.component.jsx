@@ -23,27 +23,26 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   };
   const signWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      await signUserWithEmailAndPasword(email, pasword)
-      resetFromfields()
+      await signUserWithEmailAndPasword(email, pasword);
+      resetFromfields();
     } catch (error) {
-      console.log(error)
-     switch(error.code){
-      case "auth/user-not-found":
-        alert("no se encontro usuario asociado")
-        break;
-      case "auth/wrong-password":
-        alert("error de contraseña")
-        break;
+      console.log(error);
+      switch (error.code) {
+        case "auth/user-not-found":
+          alert("no se encontro usuario asociado");
+          break;
+        case "auth/wrong-password":
+          alert("error de contraseña");
+          break;
         default:
-          console.log(error)
-     }
+          console.log(error);
+      }
     }
   };
   const handleChange = (event) => {
