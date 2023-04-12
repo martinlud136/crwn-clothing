@@ -5,14 +5,17 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./context/user.context";
+import {ProductsProvider} from "./context/products.context"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <BrowserRouter>
-      <UserProvider>
+  <BrowserRouter>
+    <UserProvider>
+      <ProductsProvider>
         <App />
-      </UserProvider>
-    </BrowserRouter>
+      </ProductsProvider>
+    </UserProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
